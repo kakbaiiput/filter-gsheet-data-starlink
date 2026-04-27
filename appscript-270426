@@ -49,7 +49,7 @@ function resetAndActivateAllFilters() {
     activated.push(name);
   });
 
-  SpreadsheetApp.getUi().alert('🔄 Filter direset & diaktifkan pada:\n' + activated.join('\n'));
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔄 Filter direset & diaktifkan pada: ' + activated.join(', '), 'Filter Reset', 4);
 }
 
 /**
@@ -57,12 +57,12 @@ function resetAndActivateAllFilters() {
  */
 function resetAndActivateFilterClientAktif() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Client Aktif');
-  if (!sheet) { SpreadsheetApp.getUi().alert('Sheet "Client Aktif" tidak ditemukan.'); return; }
+  if (!sheet) { SpreadsheetApp.getActiveSpreadsheet().toast('Sheet "Client Aktif" tidak ditemukan.', 'Error', 5); return; }
   if (sheet.getFilter()) sheet.getFilter().remove();
   sheet.getRange(1, 1, sheet.getLastRow(), COLUMNS.TOMBOL_WHATSAPP + 1).createFilter();
   _sortByJatuhTempo(sheet);
   _applyZebraBanding(sheet);
-  SpreadsheetApp.getUi().alert('🔄 Filter direset & diaktifkan pada sheet Client Aktif.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔄 Filter direset & diaktifkan pada sheet Client Aktif.', 'Filter Reset', 4);
 }
 
 // ========================================
@@ -131,7 +131,7 @@ function _applyZebraBanding(sheet) {
  */
 function _prepareClientAktifFilter() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Client Aktif');
-  if (!sheet) { SpreadsheetApp.getUi().alert('Sheet "Client Aktif" tidak ditemukan.'); return null; }
+  if (!sheet) { SpreadsheetApp.getActiveSpreadsheet().toast('Sheet "Client Aktif" tidak ditemukan.', 'Error', 5); return null; }
   if (sheet.getFilter()) sheet.getFilter().remove();
   var filter = sheet.getRange(1, 1, sheet.getLastRow(), COLUMNS.TOMBOL_WHATSAPP + 1).createFilter();
   return { sheet: sheet, filter: filter };
@@ -146,7 +146,7 @@ function filterSegera() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('SEGERA').build();
   result.filter.setColumnFilterCriteria(COLUMNS.LABEL_SEGERA + 1, criteria); // W = col 23
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🔶 Filter SEGERA aktif di kolom W + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔶 Filter SEGERA aktif di kolom W + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -158,7 +158,7 @@ function filterProses() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('PROSES').build();
   result.filter.setColumnFilterCriteria(COLUMNS.LABEL_PROSES + 1, criteria); // V = col 22
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🔵 Filter PROSES aktif di kolom V + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔵 Filter PROSES aktif di kolom V + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -174,7 +174,7 @@ function filterSegeraOnly() {
   var criteriaV = SpreadsheetApp.newFilterCriteria().setHiddenValues(['PROSES']).build();
   result.filter.setColumnFilterCriteria(COLUMNS.LABEL_PROSES + 1, criteriaV); // V = col 22
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🔶 Filter SEGERA only aktif (W=SEGERA, V tanpa PROSES) + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔶 Filter SEGERA only aktif (W=SEGERA, V tanpa PROSES) + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -186,7 +186,7 @@ function filterJatuhTempo() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('JATUH TEMPO').build();
   result.filter.setColumnFilterCriteria(COLUMNS.LABEL_JATUH_TEMPO + 1, criteria); // U = col 21
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🔴 Filter JATUH TEMPO aktif di kolom U + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔴 Filter JATUH TEMPO aktif di kolom U + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -198,7 +198,7 @@ function filterReady() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('READY').build();
   result.filter.setColumnFilterCriteria(COLUMNS.STATUS + 1, criteria); // O = col 15
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🟢 Filter READY aktif di kolom O + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🟢 Filter READY aktif di kolom O + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -210,7 +210,7 @@ function filterConfirmed() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('CONFIRMED').build();
   result.filter.setColumnFilterCriteria(COLUMNS.STATUS + 1, criteria); // O = col 15
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('✅ Filter CONFIRMED aktif di kolom O + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('✅ Filter CONFIRMED aktif di kolom O + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -222,7 +222,7 @@ function filterPaid() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('PAID').build();
   result.filter.setColumnFilterCriteria(COLUMNS.STATUS + 1, criteria); // O = col 15
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('💰 Filter PAID aktif di kolom O + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('💰 Filter PAID aktif di kolom O + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -234,7 +234,7 @@ function filterPlanned() {
   var criteria = SpreadsheetApp.newFilterCriteria().whenTextEqualTo('PLANNED').build();
   result.filter.setColumnFilterCriteria(COLUMNS.STATUS + 1, criteria); // O = col 15
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('📅 Filter PLANNED aktif di kolom O + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('📅 Filter PLANNED aktif di kolom O + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
@@ -248,7 +248,7 @@ function filterIdTransaksi() {
     .build();
   result.filter.setColumnFilterCriteria(COLUMNS.TRANSACTION_ID + 1, criteria); // N = col 14
   _sortByJatuhTempo(result.sheet);
-  SpreadsheetApp.getUi().alert('🔍 Filter ID Transaksi aktif di kolom N + diurutkan A–Z Jatuh Tempo.');
+  SpreadsheetApp.getActiveSpreadsheet().toast('🔍 Filter ID Transaksi aktif di kolom N + diurutkan A–Z Jatuh Tempo.', 'Filter', 4);
 }
 
 /**
