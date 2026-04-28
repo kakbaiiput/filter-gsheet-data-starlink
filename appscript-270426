@@ -350,7 +350,10 @@ function applyCustomFilter(colIndex, valuesStr) {
   });
 
   var hiddenValues = Object.keys(allValues).filter(function(v) {
-    return inputLower.indexOf(v.toLowerCase()) === -1;
+    var vLower = v.toLowerCase();
+    return !inputLower.some(function(input) {
+      return vLower.indexOf(input) !== -1;
+    });
   });
 
   filter.setColumnFilterCriteria(colIndex + 1,
